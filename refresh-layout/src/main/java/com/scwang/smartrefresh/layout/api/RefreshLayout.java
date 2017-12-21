@@ -17,6 +17,7 @@ import com.scwang.smartrefresh.layout.listener.OnRefreshLoadmoreListener;
  * Created by SCWANG on 2017/5/26.
  */
 
+@SuppressWarnings({"UnusedReturnValue", "SameParameterValue", "unused"})
 public interface RefreshLayout {
 
     RefreshLayout setFooterHeight(float dp);
@@ -304,13 +305,17 @@ public interface RefreshLayout {
 
     /**
      * 自动刷新
+     * @param delayed 开始延时
      */
     boolean autoRefresh(int delayed);
 
     /**
      * 自动刷新
+     * @param delayed 开始延时
+     * @param duration 拖拽动画持续时间
+     * @param dragrate 拉拽的高度比率（要求 ≥ 1 ）
      */
-    boolean autoRefresh(int delayed, float dragrate);
+    boolean autoRefresh(int delayed, int duration, float dragrate);
 
     /**
      * 自动加载
@@ -319,13 +324,17 @@ public interface RefreshLayout {
 
     /**
      * 自动加载
+     * @param delayed 开始延时
      */
     boolean autoLoadmore(int delayed);
 
     /**
      * 自动加载
+     * @param delayed 开始延时
+     * @param duration 拖拽动画持续时间
+     * @param dragrate 拉拽的高度比率（要求 ≥ 1 ）
      */
-    boolean autoLoadmore(int delayed, float dragrate);
+    boolean autoLoadmore(int delayed, int duration, float dragrate);
 
     boolean isEnableRefresh();
 

@@ -16,7 +16,6 @@ import com.scwang.refreshlayout.widget.TwoLevelHeader;
 import com.scwang.smartrefresh.layout.api.RefreshHeader;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
-import com.scwang.smartrefresh.layout.listener.OnTwoLevelListener;
 import com.scwang.smartrefresh.layout.listener.SimpleMultiPurposeListener;
 
 /**
@@ -36,8 +35,8 @@ public class SecondFloorPracticeFragment extends Fragment {
         super.onViewCreated(root, savedInstanceState);
 
         final View floor = root.findViewById(R.id.secondfloor);
-        final Toolbar toolbar = root.findViewById(R.id.toolbar);
-        final TwoLevelHeader header = root.findViewById(R.id.header);
+        final Toolbar toolbar = (Toolbar)root.findViewById(R.id.toolbar);
+        final TwoLevelHeader header = (TwoLevelHeader)root.findViewById(R.id.header);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -45,27 +44,21 @@ public class SecondFloorPracticeFragment extends Fragment {
             }
         });
 
-        final RefreshLayout refreshLayout = root.findViewById(R.id.refreshLayout);
+        final RefreshLayout refreshLayout = (RefreshLayout)root.findViewById(R.id.refreshLayout);
         refreshLayout.setOnMultiPurposeListener(new SimpleMultiPurposeListener() {
             @Override
             public void onHeaderPulling(RefreshHeader header, float percent, int offset, int bottomHeight, int extendHeight) {
                 toolbar.setAlpha(1 - Math.min(percent, 1));
-                floor.setTranslationY(offset - floor.getHeight());
-                final int toolbarHeight = toolbar.getHeight();
-                final int layoutHeight = refreshLayout.getLayout().getHeight();
-                header.getView().setTranslationY(-toolbarHeight * Math.max(0,offset - 3*toolbarHeight) / (layoutHeight - 3*toolbarHeight));
+                floor.setTranslationY(Math.min(offset - floor.getHeight() + toolbar.getHeight(), refreshLayout.getLayout().getHeight() - floor.getHeight()));
             }
             @Override
             public void onHeaderReleasing(RefreshHeader header, float percent, int offset, int bottomHeight, int extendHeight) {
                 toolbar.setAlpha(1 - Math.min(percent, 1));
-                floor.setTranslationY(offset - floor.getHeight());
-                final int toolbarHeight = toolbar.getHeight();
-                final int layoutHeight = refreshLayout.getLayout().getHeight();
-                header.getView().setTranslationY(-toolbarHeight * Math.max(0,offset - 3*toolbarHeight) / (layoutHeight - 3*toolbarHeight));
+                floor.setTranslationY(Math.min(offset - floor.getHeight() + toolbar.getHeight(), refreshLayout.getLayout().getHeight() - floor.getHeight()));
             }
         });
 
-        header.setOnTwoLevelListener(new OnTwoLevelListener() {
+        header.setOnTwoLevelListener(new TwoLevelHeader.OnTwoLevelListener() {
             @Override
             public boolean onTwoLevel(RefreshLayout refreshLayout) {
                 Toast.makeText(getContext(),"触发二楼事件",Toast.LENGTH_SHORT).show();
@@ -91,8 +84,8 @@ public class SecondFloorPracticeFragment extends Fragment {
 
         //状态栏透明和间距处理
         StatusBarUtil.immersive(getActivity());
-        StatusBarUtil.setMargin(getActivity(),  header);
-        StatusBarUtil.setPaddingSmart(getActivity(), toolbar);
+        StatusBarUtil.setMargin(getActivity(),  root.findViewById(R.id.classics));
+        StatusBarUtil.setPaddingSmart(getActivity(), root.findViewById(R.id.toolbar));
         StatusBarUtil.setPaddingSmart(getActivity(), root.findViewById(R.id.contentPanel));
     }
 }
